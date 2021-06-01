@@ -1,0 +1,18 @@
+1.1学习资料
+1.1.1学派
+频率派，延伸至统计机器学习
+贝叶斯派，延伸至概率论图模型
+1.1.2推荐书籍：
+李航，统计学习方法，10个常用的方法
+周志华，西瓜书
+Pattern Recognition and Machine Learning，主要从贝叶斯角度
+Machine Learning A Probabilistic Perspective，
+Element of Statistics Learning，主要从频率派角度
+中译版张志华翻译，Deel Learning
+1.1.3学习视频
+台大林轩田，基石，技法-各种模型
+张志华，机器学习导论（频率派），统计机器学习（贝叶斯派）
+吴恩达，CS229
+徐亦达，概率模型，github有notes
+台大李宏毅，机器学习，MLDS
+
