@@ -1,0 +1,38 @@
+1.1学习资料
+1.1.1学派
+1.1.1.1频率派
+对于数据X以及参数theta，theta是未知的常量，X是随机变量，使用最大似然估计计算参数
+由频率派延申出机器学习，可以理解为一个优化问题
+1.1.1.2贝叶斯派，延伸至概率论图模型
+对于数据X以及参数theta，theta不是常量，是一个随机变量，服从某个概率分布，\theta~p(\theta)。
+MAP：最大后验概率估计，theta_map=argmax P(\theta|x) = argmax P(X|\theta)P(\theta)
+贝叶斯估计：P(\theta|x) = P(X|\theta)P(\theta)/P(X)。计算概率分布，P(X)为对所有参数\theta的积分
+贝叶斯预测：P(x_hat|X)，给定数据X
+由于分母积分难以计算，引申出概率图，MCMC等模型
+1.1.2推荐书籍：
+李航，统计学习方法，10个常用的方法
+周志华，西瓜书
+Pattern Recognition and Machine Learning，主要从贝叶斯角度
+Machine Learning A Probabilistic Perspective，
+Element of Statistics Learning，主要从频率派角度
+中译版张志华翻译，Deel Learning
+1.1.3学习视频
+台大林轩田，基石，技法-各种模型
+张志华，机器学习导论（频率派），统计机器学习（贝叶斯派）
+吴恩达，CS229
+徐亦达，概率模型，github有notes
+台大李宏毅，机器学习，MLDS
+
+1.2高斯分布
+1.2.1参数估计
+给定N*P维数据，X_i~iid N(\miu,\sum)
+MLE，有偏估计与无偏估计
+1.2.2概率密度
+高斯分布概率密度函数中的马氏距离：(x-\mu)_{-1} \sum_{-1} (x-\mu)，协方差阵退化为I时，即为欧氏距离
+
+1.2.3
+
+1.2.4
+
+1.2.5
+
