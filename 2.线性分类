@@ -23,13 +23,32 @@ L(w) = 错误分类数量；但不可导
 2.线性判别(fisher判别分析)
 数据 X；Y；y_i {-1,1}
 思想：在一个合适的投影方向进行投影（降维），类内差异小类间差异大
-  类间：类间均值的欧氏距离
+  类间：类间均值差值的平方
   类内：用方差表示
 目标函数：类间/（类内）J(w) = (z_1-z_2)^2 / S_1 + S_2
-argmax J(w) = w^T (x_c1 - x_c2)(x_c1-x_c2)^T w /(w_T (s_c1 + s_c2)w)
-s为方差，c1 c2 为两个类别内的数据样本
+argmax(w) J(w) = w^T (\bar x_c1 - \bar x_c2)(\bar x_c1 - \bar x_c2)^T w /(w_T (s_c1 + s_c2)w)
+S为方差，c1 c2 为两个类别内的数据样本
+J(w) = W^T S_b W / W^T S_w W
+S_b 类间方差；S_w 类内方差
+\partial J(W) / \partial w = 0
 
-3.高斯判别
+3.逻辑回归
+概率判别模型，对P(Y|x)进行建模
+逻辑回归使用MLE
 
+4.高斯判别分析
+概率生成模型，并不直接计算P(y|x)计算 \hat y = argmax(y=0/1) P(y|x) (= P(x|y)P(y))
+而是比较 P(y=0|x) P(y=1|x) 
+P(y|x) 后验 正比于 P(x|y)P(y)  似然*先验
+先验：y服从伯努利分布；P(y=1) = \fai
+后验：x|y 服从高斯分布：x|y=1 ~ N(miu_1, \sum) ； x|y=0 ~ N(miu_2, \sum)
+使用MLE求参数，均值、方差、先验的分布均为参数(计算协方差矩阵时需要使用矩阵绝对值以及矩阵迹的偏导公式)
+\partial tr(AB) / \partial A = B^T
+\partial |A| / \partial A = |A|A^(-1)
 
-4.朴素贝叶斯
+5.朴素贝叶斯
+思想：朴素贝叶斯假设；条件独立性假设；最简单的概率图模型（有向图）；给定y x_i 独立于 x_j(第i\j维的方向)
+P(x|y) = \product P(x_j|y)
+假设：x离散，服从categorial dist；x连续，Guassian dist
+\hat y = argmax(y=0/1) P(y|x) (= P(x|y)P(y))
+使用MLE直接进行计算
