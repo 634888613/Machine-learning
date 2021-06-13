@@ -1,1 +1,35 @@
+1.SVM
+间隔、对偶、核技巧
+hard-margin SVM
+soft-margin SVM
+Kernel SVM
+
+2.Hard-margin SVM
+SVM一开始用于解决二分类问题，f(w) = sign(w_T x +b) (判别模型而非概率模型)
+在存在的多条可以正确分类的直线中挑选出"最好的"，
+N个x,y样本点，x p维；y {-1,1}
+也叫最大间隔分类器
+max margin(w,b) 
+s.t. y_i(w^T x_i+b)>0
+margin(w,b)=最短的样本点到超平面的距离=min_{w,b,x_i} distance(w,b,x_i)=min_{w,b,x_i} 1/||w|| |w_T x_i+b| 
+max min_{w,b,x_i} 1/||w|| |w_T x_i+b| = max{w,b} 1/||w|| min{x_i} y_i (w_T x_i+b)
+s.t. y_i(w^T x_i+b)>0 =>  存在r>0, min y_i(w_T x_i+b)=r
+由于超平面可以等比例放缩，假设r=1
+问题转变为一个凸优化问题(primal proplem)
+min ||w|| => min{w,b} 1/2 w^T w
+s.t. min y_i(w^T x_i+b)=1 => y_i(w_T x_i+b)>=1
+拉格朗日乘子法将带约束的问题转换为无约束问题
+L(w,b,\lambda) = 1/2 w^T w +\sum \lambda_i (1-y_i(w^T x^i+b))
+min{w,b} max{\lambda} L(w,b,\lambda)
+s.t. \lambda_i >=0
+
+
+对偶问题
+
+
+
+
+
+
+
 
