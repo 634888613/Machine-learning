@@ -5,6 +5,7 @@ soft-margin SVM
 Kernel SVM
 
 2.Hard-margin SVM
+解决完美分类；噪声对结果产生影响
 SVM一开始用于解决二分类问题，f(w) = sign(w_T x +b) (判别模型而非概率模型)
 在存在的多条可以正确分类的直线中挑选出"最好的"，
 N个x,y样本点，x p维；y {-1,1}
@@ -27,10 +28,15 @@ max{\lambda} min{w,b} L(w,b,\lambda)
 s.t. \lambda_i >=0
 对这种无约束问题，可以利用偏导直接计算w,b的极值，可以进一步简化该优化问题
 max{\lambda} -1/2 \sum_i\sum_j lambda_i lambda_j y_i y_j x_i^T x_j +\sum_i \lambda_i
+s.t. \lambda_i >=0
+  \sum \lambda_i y_i =0
+原对偶问题具有强对偶关系<=>满足KKT条件
+利用KKT条件，可以计算处w^T,b从而得到超平面
+大部分\lambda 均为0，只有少部分起到了支持作用
 
-
-
-
-
-
-
+3.soft-margin SVM
+允许少量错误
+min 1/2 w_T w +loss(代表错误)
+1)loss允许分类错误的个数，但是函数不连续(0，1)
+2)loss代表距离，如果y_i(w^T x_i+b)>=1,loss=1;...<1, loss= 1-y_i(...)
+min{w,b} 1/2 w^T+C
