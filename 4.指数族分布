@@ -1,0 +1,6 @@
+1.指数族
+指数族分布通式
+p(x|\eta) = h(x)exp(^T \phi(x)-A(\eta))
+A(\eta)=log partition function
+统计量-对样本数据的加工；充分统计量，包含总体样本的特征
+\phi(x)-充分统计量
