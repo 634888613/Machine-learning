@@ -4,3 +4,27 @@ p(x|\eta) = h(x)exp(^T \phi(x)-A(\eta))
 A(\eta)=log partition function
 统计量-对样本数据的加工；充分统计量，包含总体样本的特征
 \phi(x)-充分统计量
+共轭性：计算角度
+最大熵-无信息先验
+指数族分布是广义线性模型；概率图模型；变分推断的重要概念
+1.1正态分布的指数族形式
+1.2\phi充分统计量与对数配分函数的关系
+\partial A(\eta)=E_p[\phi(x)]
+\p\p A(\eta)=Var[\phi(x)]
+
+2.最大熵角度
+熵：E[-log(p)]——连续-积分；离散-均值
+最大熵<=>等可能
+条件约束问题，拉格朗日乘子法
+max H[p]=max-\sum_1^k p_i log p_i
+s.t. sum p_i=1
+2.1最大熵原理
+满足已知事实满足最大熵的分布
+经验分布:对已知样本的描述\hat p(X=x)=count(x)/N
+f(x)是任意函数，E_p[f(x)]=\Delta已知——通过满足此特征进而实现满足已知事实
+H[p]=\sum p(x)lop p(x)
+min \sum p(x) log p(x)
+s.t. \sum p_i=1; E[f(x)]=\Delta
+然后使用拉格朗日乘子法，对p(x)求偏导——p(x)=exp{\lambda_1 f(x)-(\lambda_0+1)}
+不同\lambda 对应两个条件
+使用最大熵原理，得到的结果分布满足指数族分布
