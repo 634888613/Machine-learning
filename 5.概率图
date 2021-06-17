@@ -41,5 +41,56 @@ local markov：给定邻居，与其他独立
 基于Hammesley-Clifford定理，基于最大团因子分解可以作用于马尔可夫场
 
 4.Inference
+解决的问题：求边缘概率；条件概率；MAP inference:\hat z=argmax p(z|x)（最大后验）
+Inference分类：
+精确推断:变量消除法(VE)；Belief propagation(sum product algorithm,针对树结构);Junction tree Algorithm（普通图结构）；
+近似推断:Loop Belief propagation;Monte Carlo Inference(importance Sampling,MCMC);Variational Inference
+隐马尔科夫：1)evaluation-包含计算边缘概率的思想，p(o);2)Learning;3)Decoding,求隐状态序列。1)3)都是Inference问题
+4.1.Variable Elimination（主要思想乘法分配律）
+ex. a->b->c->d;p(d)=...(因子分解)
+假设a,b,c,d为离散的二值变量，p(d)=\phi_c(d)（类比HMM的前项算法）
+如果计算p(c)，向前和向后项相乘
+缺点：重复计算；ordering影响整体复杂度
+4.2.Belief Propagation
+对比VE：chain->tree 有向->无向
+a;c;d-b, p(a)=\sai_a m_{b->a}(x_a)
+结论：不直接计算边缘概率，之需求m_{i->j}BP核心思想为VE，但是带入了遍历从而减少计算度的方法
+BP=VE+cashing
+BP(sequence implementation)
+1)get root;2)collect message;3)distribute message
+BP(parallel implementation)
+1)随机找到一个点；2)向周围扩散消息；3)最终达到收敛
+4.3.Max-product Algorithm
+1)BP的改进；2)Viterbi的推广
+m_{b->a}能让b,c,d联合概率最大
+m_{j->i}=max_{x_j} \psi_j \psi_{ij} \product_neighber m_{k->j}
+sum product--BP算法 max product--Max-product算法
+e.x. m_{c->b}=max_x_c \psi_c \psi_cb;x_c代表c的状态
+
+5.因子图 Factor Graph
+有向图：p(x)=\product_x p(x_i|x_pa(i))
+无向图：p(x)=1/z \product_x \phi(x_ci) x_ci最大团集合
+道德图：有向图->无向图（引入环）
+模型出发点
+1)因子图可以把环去掉
+2)简便
+因式分解本身对应了一个特殊的因子图
+因子图 p(x)=\product f_i(x_i)
+因子图可以理解为两层图结构，一层为节点，一层为关联
+
+6.道德图 Moral Graph
+想法：把有向图转为无向图，因为无向图更加generalized
+a->b;c, p(a,b,c) = p(a)p(b|a)[-\phi(a,b)]p(c|a)[\phi(a,c)]
+团-两两相连
+a;b->c，形成一个loop
+对于V图：
+1)对于G中x_i,将paramet(x_i)（父结点）两两链接
+2)将G中的有向边替换为无向边
+可以将有向图转换为无向图进而分析条件独立性
+
+
+
+
+
 
 
