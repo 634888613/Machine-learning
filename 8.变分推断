@@ -1,0 +1,37 @@
+1.背景
+频率角度->优化问题：回归，loss function，解析解，数值解(GD,SGD)；
+SVM，有约束的优化问题，Convex优化，QP求解，拉格朗日对偶；EM
+贝叶斯角度->积分问题：Inference 计算后验，然后利用后验概率计算估计值：
+精确推断，能准确计算出后验概率；近似推断：确定性近似推断，随机近似推断
+变分推断时确定性近似的一种，随机近似包括MCMC，MH,GIBBS等
+
+2.变分推断（基于平均场理论）
+X:observed data
+Z:latent variable+parameter
+(X,Z)complete data
+log p(x)=ELBO+KL(q||p)=L(q)+KL
+找到q(z)=p(z|x),可演化为找到最大的L(Q)
+假设q(z)=\product q_i(z_i)，分为m份相互独立的 -->平均场理论
+L(q)=\int_z q(z)log P(x,z)dz-\int_z q(z)log q(z)dz
+这两项展开后可以发现规律
+=\int_z_j q_j(z_j)E[log p(x,z)]dz_j+\int_z_j q_j(z_j) log q_j(z_j)dz_j+C
+=-KL(q_j||\hat p(x,z_j)) <=0
+当q_j(z_j)=\hat P时，=0
+使用了迭代的思想，每次都是固定一个q_j然后对其他所有q进行积分，把所有q列出来，可以发现这是一个Coordinate Ascend
+但是这种经典VI存在一些问题
+1）假设太强，m份相互独立的这一假设可能不成立
+2）积分无法计算
+
+3.SGVI 随机梯度
+对q的分布进行假设，q(z)=q_\phi(z)，然后重新写出ELBO
+\phi = argmax_\phi L(\phi)
+\nabla L(\phi)=\nable E_{q\phi}[log P_\theta(x^(i),z)-log q_\phi]
+把E表示为积分形式，把积分与梯度互换\int \nable q+\int \nable [log...]
+=E_{q_\phi}[\nabla_\phi log q_\phi(log p_\theta(x^(i),z)-log q_\phi)]
+由于方差可能很大，直接使用蒙特卡洛模拟不合理
+需要考虑如何降低方差，Reparameterization Trick
+z=g_\phi(\epsilon,x^(i))
+z~q_\phi(z|x^(i))
+\epsilon~p(\epsilon)
+|q_\phi(z|x^(i)dz)|=|p(\epsilon)d\epsilon|
+\nabla_\phi L(\phi)=E_{\phi(\epsilon)}[\nabla(log P_\theta(x^(i)z)-log q_\phi(z|x^(i)))\nabla_\phi z]
