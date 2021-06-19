@@ -1,0 +1,25 @@
+1.高斯混合模型
+角度一：几何角度，多个高斯分布的叠加（加权平均）
+p(x)=\sum \alpha N(\mu_k,\sum_k),\sum \alpha_k=1
+\alpha为权重
+角度二：混合模型角度；概率生成角度
+引入一个隐变量z，z代表对应的样本x属于哪一个高斯分布，z为一个离散随机变量
+生成模型补充：生成过程：1）假设有一个骰子；2）筛子k面，每面概率值不同，得出的一个面，然后在面上取样
+p(x)=\sum_z p(x,z=C_k)=\sum p(z=C_k)p(x|z=C_k) (离散分布*k—th高斯分布)
+X-observed data;(z,x) complete data
+\theta，参数，属于不同高斯的概率以及高斯分布的均值与方差
+参数计算时使用最大似然估计无法计算解析解
+需要使用EM算法解决GMM参数的计算，
+E-step
+Q(\theta,\theta^(t))=\int_z log p(x,z|\theta) p(z|x,\theta^(t))dz
+=\sum_z log \product p(x|z) \product p(z|x,\theta^(t))
+=\sum_{k=1-K} \sum_{i=1-N} log p(x_i,z_i|\theta) \product p(z_i|x_i,\theta^(t))
+=\sum[log P(x_1,z_1|\theta)+log P(x_2,z_2|\theta)+....]\product P(z_i|x_i,\theta^(t))
+第一项拿出来看，可以约掉后边的连乘
+=\sum log P(x_1,z_1|\theta)P(z_1|x_1,\theta^(t))+...+\sum log P(x_N,z_N|\theta)P(z_N|x_N,\theta^(t))
+=\sum_N \sum z_i log P(x_i,z_i|\theta)P(z_i|x_i,\theta^(t))
+=\sum \sum log P_{z_i}N(x_i|mu,\sum) P(x,z)/p(x)(这一项使用上一步迭代得到的数据，贝叶斯公式展开)
+注意区分\theta \theta^(t)
+M-step
+迭代p_k,\mu_k,\sum
+e.x. 计算p_k，约束优化问题，使用拉格朗日乘子法:\lambda=-N，p_k^(t+1)=1/N\sum P(z_i=c_k|x_i,\theta^(t))
