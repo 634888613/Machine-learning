@@ -1,0 +1,91 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "近似推断/精确推断，其中近似推断重的随即推断中最著名的即为MCMC"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 一.背景知识  \n",
+     "软分类：概率生成模型p(x,y)，概率判别模型p(x|y)",
+    "结合HMM与最大熵模型，得到MEMM模型（最大熵马尔可夫），其也是一个概率判别模型，打破了HMM观测独立假设，但依然存在标注偏差问题（局部归一化），因此在此基础上引出了CRF（条件随机场），使用全局归一化",
+    "HMM到MEMM，HMM是一个生成模型，HMM：两个假设，一阶齐次，观测独立假设。MEMM打破观测独立假设",
+    "MEMM到CRF，MEMM有标注偏差问题， "
+   ]
+  },
+    {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 二.HMM-Evaluation问题  \n",
+    "利用\\lambda求P(O|\\lambda)",
+     "P(O|\\lambda)=\\sum P(I,O|\\lambda)=\\sum P(O|I,\\lambda)P(I|\\lambda),复杂度为O(N^T)    \n",
+     "前向算法：\\alpha_t(i)=P(o_1,...o_t,i_t=q_i|\\lambda),\\alpha_T(i)=P(O,i_t=q_i|\\lambda)   \n",
+     "P(O|\\lambda)=\\sum_{i=1}^N P(O,i_t=q_i|\\lambda)=\\sum \\alpha_T(i)",
+     "从观测序列向后推\\alpha_{t+1}(j)=P(o_1,...o_t,o_{t+1},i_{t+1}=q_j|\\lambda)=\\sum P(o...,i_{t+1},i_t)=\\sum P(O_{t+1}|i_{t+1}=q_j) P(...))(无后效性假设)，把i_{t+1}提出来=\\sum_{i=1}^N b_j(O_{t+1})a_{ij}\\alpha_t(i)，即为前向递归公式",
+     "后向算法：引入\\beta_t(i)=P(o_{t+1},...,o_T|i_t=q_i,\\lambda),从后往前推，\\beta_1(i)=P(O_2,...,O_T|i_1=q_i,\\lambda)",
+     "P(O|\\lambda)=P(o_1,...o_T|\\lambda)=\\sum P(o_1,...o_T|i_1=q_i)P(i_1=q_i)(->\\pi_i)=\\sum b_i(o_1)\\beta_1(i)",
+     "\\beta_t(i)=\\sum b_j(O_{t+1})a_{ij}\\beta_{t+1}(j)",
+     "\\beta_T->\\beta_1->P(O|\\lambda)"
+   ]
+  },
+    {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 三.HMM-Learning问题 \n",
+    "使用EM算法，\\theta^{t+1}=argmax \\int_z log p(x,z|\\theta)p(z|x,\\theta^{t})dz,x是观测数据，z是隐变量，\\theta是参数     \n",
+     "Q(\\lambda,\\lambda^(t))=\\sum(隐变量) log P(O,I|\\lambda)P(O,I|\\lambda^t)",
+     "\\pi^{t+1}=argmax \\sum [log \\pi_i P(O,i_1=q_i|\\lambda^t)] s.t.\\sum \\pi_i=1",
+     "\\pi_i^t=\\frac{P(O,i_1=q_i|\\lambda^t)}{P(O|\\lambda^t)}",
+     "A,B的计算的思想与计算\\pi的思想相同，PS：这个就是Baum Welch算法，但其实就是EM"
+   ]
+  },
+    {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 四.HMM-Decoding问题 \n",
+    "\\hat{I}=argmax_I P(I|I,\\lambda),可以理解为一个动态规划问题,Viterbi算法,   \n",
+     "\\delta_t(i)=max P(o_1...o_t,i_1...i_t=q_i),接下来需要寻找递归式   \n",
+     "\\delta_{t+1}(j)=max P(o_1,o_2,...o_{t+1},i_1,...i_{t+1}=q_j)=max \\delta_t(i)a_{ij}b_j(O_{t+1})  \n",
+     "\\phi_{t+1}(j)=argmax_{1<=i<=N} \\delta_t(i)a_{ij},寻找从哪来的，记录最短路径序列，进而排成一个最短路径"
+   ]
+  },
+    {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### 五.HMM \n",
+    "HMM是一个混合模型并增加时间轴，与GMM进行类比，可以把HMM理解为GMM增加时间，HMM对于发射矩阵没有特定要求，也可以为概率分布，只需要i为离散   \n",
+     "动态模型-state space model状态空间模型，针对解决两大问题，1）learning 问题，通过数据学习参数；2）inference：推断后验概率P(z|x)，数据与数据之间可能存在在关联，作用：1）decoding，给定观测序列，求隐状态序列P(z_1...z_t|x_1,x_2,x_t);2)prob of evidence:P(x|\\theta)=P(x_1,x_2...x_T|\\theta) 使用前向或后向算法;3)filtering:P(z_t|x_1,...x_t),滤波问题，因为拿到了更多的历史数据，可以过滤掉更多的噪声->在线学习，P(z_t|x_{1:t})正比于\\alpha_t；4)smoothing P(z_t|x_1...x_T)->offline，P(x_{1:T},z_t)=P(x_{t+1,T}|x_{1:t},z_t)P(x_{1:t},z_t)正比于P(x_{t+1:T},z_t)=\\alpha_t\\beta_t，转换时，使用概率图中条件独立的思想,前向后向算法；5)prediction，P(z_{.}/x_{.}|x_1,x_2...x_t)，P(Z_{t+1}|x_{1:t})=\\sum P(z_{t+1},z_t|x_{1:t})=\\sum P(z_{t+1}|z_t,x_{t+1})P(z_t|x_{1:t})P(z_{t+1}|z_t)这就是filtering问题了，P(x_{t+1}|x_{1:t})=\\sum P(x_{t+1},z_{t+1}|x{1:t})=\\sum P(x_{t+1}|z_{t+1},x{1:t})P(z_{t+1}|x_{1:t})    \n",
+   ]
+  }
+   ],
+   "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.4"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
