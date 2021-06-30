@@ -49,7 +49,7 @@ P(y|x) 后验 正比于 P(x|y)P(y)  似然*先验
 
 5.朴素贝叶斯
 思想：朴素贝叶斯假设；条件独立性假设；最简单的概率图模型（有向图）；给定y x_i 独立于 x_j(第i\j维的方向)
-P(x|y) = \product P(x_j|y)
+P(X|Y) = \product_^n P(x_i|y)
 假设：x离散，服从categorial dist；x连续，Guassian dist
-\hat y = argmax(y=0/1) P(y|x) (= P(x|y)P(y))
-使用MLE直接进行计算
+\hat y = argmax(y=0/1) P(y|x) (= P(x|y)P(y)),进而可以将问题转化为f(x)=argmax P(Y=c_k)\\product P(X=x|Y=c_k)
+进而可以使用MLE直接进行计算参数P(Y=c_k)和P(X_i=x_i|Y=c_k)
